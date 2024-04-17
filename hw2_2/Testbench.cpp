@@ -176,7 +176,7 @@ void Testbench::do_gaussianblur()
         mask[2] = 0xff;
         mask[3] = 0;
         initiator.write_to_socket(GAUSSIANBLUR_FILTER_R_ADDR, mask, data.uc, 4);
-        wait(1 * CLOCK_PERIOD, SC_NS);
+        // wait(1 * CLOCK_PERIOD, SC_NS);
       }
 
       bool done = false;

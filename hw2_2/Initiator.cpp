@@ -48,7 +48,7 @@ int Initiator::write_to_socket(unsigned long int addr, unsigned char mask[],
 
 void Initiator::do_trans(tlm::tlm_generic_payload &trans)
 {
-    m_qk.set_global_quantum(sc_time(5, SC_NS));
+    m_qk.set_global_quantum(sc_time(4, SC_NS));
     m_qk.reset();
     // sc_core::sc_time dummyDelay = sc_core::SC_ZERO_TIME;
     sc_core::sc_time delay = sc_core::SC_ZERO_TIME;

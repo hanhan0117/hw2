@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <chrono>
 using namespace std;
 
 // Wall Clock Time Measurement
@@ -16,6 +17,7 @@ struct timeval start_time, end_time;
 // int main(int argc, char *argv[])
 int sc_main(int argc, char **argv)
 {
+  auto start_time = std::chrono::high_resolution_clock::now();
   if ((argc < 3) || (argc > 4))
   {
     cout << "No arguments for the executable : " << argv[0] << endl;
@@ -33,5 +35,10 @@ int sc_main(int argc, char **argv)
   sc_start();
   std::cout << "Simulated time == " << sc_core::sc_time_stamp() << std::endl;
   tb.write_bmp(argv[2]);
+
+  auto end_time = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+  std::cout << "Function runtime: " << duration.count() * 1e6 << " ns " << std::endl;
+
   return 0;
 }

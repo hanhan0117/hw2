@@ -5,6 +5,7 @@ using namespace std;
 // Wall Clock Time Measurement
 #include <sys/time.h>
 
+#include "SimpleBus.h"
 #include "GaussianblurFilter.h"
 #include "Testbench.h"
 
@@ -24,10 +25,13 @@ int sc_main(int argc, char **argv)
     return 0;
   }
 
-  // Create modules and signals
   Testbench tb("tb");
+  SimpleBus<1, 1> bus("bus");
+  bus.set_clock_period(sc_time(CLOCK_PERIOD, SC_NS));
   GaussianblurFilter gaussianblur_filter("gaussianblur_filter");
-  tb.initiator.i_skt(gaussianblur_filter.t_skt);
+  tb.initiator.i_skt(bus.t_skt[0]);
+  bus.setDecode(0, SOBEL_MM_BASE, SOBEL_MM_BASE + SOBEL_MM_SIZE - 1);
+  bus.i_skt[0](gaussianblur_filter.t_skt);
 
   tb.read_bmp(argv[1]);
   sc_start();

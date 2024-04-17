@@ -6,6 +6,7 @@ using namespace std;
 using namespace sc_dt;
 
 #include "Testbench.h"
+#include "MemoryMap.h"
 #include "tlm_utils/simple_initiator_socket.h"
 #include "tlm_utils/tlm_quantumkeeper.h"
 
@@ -180,7 +181,7 @@ void Testbench::do_gaussianblur()
         mask[2] = 0xff;
         mask[3] = 0;
         write_num = write_num + 1;
-        initiator.write_to_socket(GAUSSIANBLUR_FILTER_R_ADDR, mask, data.uc, 4);
+        initiator.write_to_socket(GAUSSIANBLUR_FILTER_R_ADDR + SOBEL_MM_BASE, mask, data.uc, 4);
         wait(1 * CLOCK_PERIOD, SC_NS);
       }
 
@@ -188,14 +189,14 @@ void Testbench::do_gaussianblur()
       int output_num = 0;
       while (!done)
       {
-        initiator.read_from_socket(GAUSSIANBLUR_FILTER_CHECK_ADDR, mask, data.uc, 4);
+        initiator.read_from_socket(GAUSSIANBLUR_FILTER_CHECK_ADDR + SOBEL_MM_BASE, mask, data.uc, 4);
         output_num = data.sint;
         if (output_num > 0)
           done = true;
       }
       // wait(10 * CLOCK_PERIOD, SC_NS);
       read_num = read_num + 1;
-      initiator.read_from_socket(GAUSSIANBLUR_FILTER_RESULT_ADDR, mask, data.uc, 4);
+      initiator.read_from_socket(GAUSSIANBLUR_FILTER_RESULT_ADDR + SOBEL_MM_BASE, mask, data.uc, 4);
       total = data.sint;
       // debug
       //  cout << "Now at " << sc_time_stamp() << endl; //print current sc_time
